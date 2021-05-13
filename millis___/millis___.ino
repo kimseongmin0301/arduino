@@ -31,7 +31,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, PIN, NEO_GRB + NEO_KHZ800);
 
 
 void setup() {
- lcd.init();
+  lcd.init();
   lcd.backlight();
   dht.begin();
   sensor_t sensor;
@@ -43,7 +43,7 @@ void setup() {
 
 
  
-   pinMode(6, OUTPUT);
+  pinMode(6, OUTPUT);
   pinMode(7, OUTPUT);
   pinMode(8,OUTPUT);// 출력핀으로 설정합니다
   strip.begin(); //네오픽셀을 초기화하기 위해 모든LED를 off시킨다
