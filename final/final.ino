@@ -48,6 +48,8 @@ void setup() {
   //led strip
   strip.begin(); //네오픽셀을 초기화하기 위해 모든LED를 off시킨다
   strip.show();
+  strip2.begin();
+  strip2.show();
 
   //모터, 레이저
   my.attach(11);
