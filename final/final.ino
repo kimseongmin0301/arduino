@@ -1,5 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <DHT.h>
+#include <DHT_U.h>
+#include <Adafruit_Sensor.h>
 #include <LiquidCrystal_I2C.h>
 #include "Adafruit_VL53L0X.h"
 #include <Wire.h>
@@ -9,7 +11,7 @@
 #define red_off2 digitalWrite(9,LOW);
 #define green_on2 digitalWrite(10,HIGH);
 #define green_off2 digitalWrite(10,LOW); 
-#define DHTTYPE    DHT11 
+#define DHTTYPE DHT11 
 #define red_on digitalWrite(6,HIGH);   //차 신호등 6, 7, 8
 #define green_on digitalWrite(8,HIGH);
 #define yellow_on digitalWrite(7,HIGH);
@@ -19,11 +21,11 @@
 #define LEDOFF digitalWrite(6, LOW);digitalWrite(7, LOW);digitalWrite(8,LOW);digitalWrite(9,LOW);digitalWrite(10,LOW); 
 
 
-DHT_Unified dht(DHTPIN, DHTTYPE);
+DHT_Unified dht(12, DHTTYPE);
 
 uint32_t delayMS;
 LiquidCrystal_I2C lcd(0x27, 16, 2);         //LCD
-Adafruit_VL53L0X lox = Adafruit_VL53L0X();  //레이저
+//Adafruit_VL53L0X lox = Adafruit_VL53L0X();  //레이저
 Servo my; //서보
 
 unsigned long past=0;      //이전시간
@@ -53,9 +55,7 @@ void setup() {
 
   //모터, 레이저
   my.attach(11);
-  if (!lox.begin()) {
-    while(1);
-  }
+
   
   
   pinMode(2, INPUT);
@@ -65,24 +65,32 @@ void setup() {
   pinMode(8,OUTPUT);
   pinMode(9,OUTPUT);
   pinMode(10,OUTPUT);
+  pinMode(22,INPUT);
+
+
+  
 }
 
 void loop() {
   lcd_on();
   tone1();
-  motor(); 
   touch();
+//  motor(); 
   sinho();
+
+ Serial.println(order);
+
   }
   
 void sinho(){ //신호등
       now = millis();
-
     if (order == 0) {
         colorWipe(strip.Color(255, 0, 0),1);
         colorWipe2(strip2.Color(255, 0, 0),1);
+        LEDOFF;
         green_on;
         red_on2;
+        my.write(10);
         if(now - past > 5000){
             order = 1;
             if(now > past){
@@ -110,6 +118,7 @@ void sinho(){ //신호등
         LEDOFF;
         red_on;
         green_on2;
+        my.write(160);
         if(now - past > 5000){
             order = 3;
             if(now > past){
@@ -119,8 +128,20 @@ void sinho(){ //신호등
     }  else if(order == 3){
         strip.begin();
         strip2.begin();
+        LEDOFF;
         order = 0;
     }
+    else if(order == 4){
+        strip.begin();
+        colorWipe(strip.Color(0, 255, 0),1);
+        if(now - past > 5000){
+            order = 3;
+            if(now > past){
+                past = now;
+            }
+        }
+    }
+
 }
 
 
@@ -177,6 +198,12 @@ void lcd_on(){ //dht + lcd
   }
 }
 
+void touch(){
+  if(order == 3 && digitalRead(2)==1){
+    order = 4;
+}
+}
+
 //void motor(){  ////레이저모터
 //   VL53L0X_RangingMeasurementData_t measure;
 //   lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
@@ -193,12 +220,5 @@ void lcd_on(){ //dht + lcd
 //     }
 //   else
 //      my.write(60);  
-//   
-//}
-
-//void touch(){ ////신호등 초기화
-//  if(order == 2){
-//    if (digitalWrite(22) == 1)
-//         order == 2;
-//    }
+//  
 //}

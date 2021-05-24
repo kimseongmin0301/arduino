@@ -3,7 +3,7 @@
 #include <DHT_U.h>
 #include <LiquidCrystal_I2C.h>
 
-#define DHTPIN 2 
+#define DHTPIN 12 
 #define DHTTYPE    DHT11 
 
 DHT_Unified dht(DHTPIN, DHTTYPE);
@@ -48,11 +48,13 @@ void loop() {
   if (isnan(event.temperature)) {
     lcd.print(F("Error reading temperature!"));
   }
+ 
   else {
     lcd.print(F("Temp: "));
     lcd.print(event.temperature);
     lcd.print(F("C"));
   }
+   lcd.print("asdf");
   dht.humidity().getEvent(&event);
   lcd.setCursor(0,1);
   if (isnan(event.relative_humidity)) {
