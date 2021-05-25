@@ -65,8 +65,8 @@ void setup() {
   pinMode(8,OUTPUT);
   pinMode(9,OUTPUT);
   pinMode(10,OUTPUT);
-  pinMode(22,INPUT);
-
+  pinMode(12,INPUT);
+  pinMode(24,INPUT);
 
   
 }
@@ -199,7 +199,7 @@ void lcd_on(){ //dht + lcd
 }
 
 void touch(){
-  if(order == 3 && digitalRead(2)==1){
+  if(order == 3 && digitalRead(24)==1){
     order = 4;
 }
 }
