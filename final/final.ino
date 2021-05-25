@@ -18,7 +18,7 @@
 #define yellow_off digitalWrite(7,LOW);
 #define red_off digitalWrite(6,LOW);
 #define green_off digitalWrite(8,LOW);
-#define LEDOFF digitalWrite(6, LOW);digitalWrite(7, LOW);digitalWrite(8,LOW);digitalWrite(9,LOW);digitalWrite(10,LOW); 
+#define LEDOFF digitalWrite(6, LOW);digitalWrite(7, LOW);digitalWrite(8,LOW);
 
 
 DHT_Unified dht(12, DHTTYPE);
@@ -85,12 +85,12 @@ void loop() {
 void sinho(){ //신호등
       now = millis();
     if (order == 0) {
-        colorWipe(strip.Color(255, 0, 0),1);
-        colorWipe2(strip2.Color(255, 0, 0),1);
+        colorWipe(strip.Color(255, 0, 0),50);
+        colorWipe2(strip2.Color(255, 0, 0),50);
         LEDOFF;
         green_on;
         red_on2;
-        my.write(10);
+        my.write(0);
         if(now - past > 5000){
             order = 1;
             if(now > past){
@@ -113,12 +113,12 @@ void sinho(){ //신호등
     } else if(order == 2){
         strip.begin();
         strip2.begin();
-        colorWipe(strip.Color(0, 255, 0),1);
-        colorWipe2(strip.Color(0, 255, 0),1);
+        colorWipe(strip.Color(0, 255, 0),50);
+        colorWipe2(strip.Color(0, 255, 0),50);
         LEDOFF;
         red_on;
         green_on2;
-        my.write(160);
+        my.write(90);
         if(now - past > 5000){
             order = 3;
             if(now > past){
@@ -133,7 +133,7 @@ void sinho(){ //신호등
     }
     else if(order == 4){
         strip.begin();
-        colorWipe(strip.Color(0, 255, 0),1);
+        colorWipe(strip.Color(0, 255, 0),50);
         if(now - past > 5000){
             order = 3;
             if(now > past){
@@ -203,22 +203,3 @@ void touch(){
     order = 4;
 }
 }
-
-//void motor(){  ////레이저모터
-//   VL53L0X_RangingMeasurementData_t measure;
-//   lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
-//   if(order == 0 or order == 1){
-//        if (measure.RangeStatus != 4) {  // phase failures have incorrect data
-//           //Serial.print(measure.RangeMilliMeter);
-//           //Serial.println("mm");
-//           if(measure.RangeMilliMeter<=100){
-//             my.write(160);
-//            }
-//            else
-//             my.write(60); 
-//           }
-//     }
-//   else
-//      my.write(60);  
-//  
-//}
