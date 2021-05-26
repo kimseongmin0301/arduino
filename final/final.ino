@@ -3,7 +3,7 @@
 #include <DHT_U.h>
 #include <Adafruit_Sensor.h>
 #include <LiquidCrystal_I2C.h>
-#include "Adafruit_VL53L0X.h"
+//#include "Adafruit_VL53L0X.h"
 #include <Wire.h>
 #include <Servo.h>
 
@@ -18,7 +18,7 @@
 #define yellow_off digitalWrite(7,LOW);
 #define red_off digitalWrite(6,LOW);
 #define green_off digitalWrite(8,LOW);
-#define LEDOFF digitalWrite(6, LOW);digitalWrite(7, LOW);digitalWrite(8,LOW);
+#define LEDOFF digitalWrite(6, LOW);digitalWrite(7, LOW);digitalWrite(8,LOW); digitalWrite(9,LOW);digitalWrite(10,LOW);
 
 
 DHT_Unified dht(12, DHTTYPE);
@@ -55,11 +55,11 @@ void setup() {
 
   //모터, 레이저
   my.attach(11);
-
+  my.write(0);
   
   
   pinMode(2, INPUT);
-  pinMode(3,OUTPUT);
+  pinMode(23,OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(7, OUTPUT);
   pinMode(8,OUTPUT);
@@ -91,7 +91,7 @@ void sinho(){ //신호등
         green_on;
         red_on2;
         my.write(0);
-        if(now - past > 5000){
+        if(now - past > 10000){
             order = 1;
             if(now > past){
                 past = now;
@@ -119,7 +119,7 @@ void sinho(){ //신호등
         red_on;
         green_on2;
         my.write(90);
-        if(now - past > 5000){
+        if(now - past > 10000){
             order = 3;
             if(now > past){
                 past = now;
@@ -134,7 +134,7 @@ void sinho(){ //신호등
     else if(order == 4){
         strip.begin();
         colorWipe(strip.Color(0, 255, 0),50);
-        if(now - past > 5000){
+        if(now - past > 10000){
             order = 3;
             if(now > past){
                 past = now;
@@ -146,15 +146,14 @@ void sinho(){ //신호등
 
 
 void tone1(){ //터치 소리
-  if(order == 2){
-    int a = digitalRead(2);
-    if (a == 1)
-        tone(3,260);
+  if(digitalRead(10) == 1){
+    if (digitalRead(2) == 1)
+        tone(23,260);
     else
-        noTone(3);
+        noTone(23);
     }
   else
-    noTone(3);
+    noTone(23);
   } 
 
 void colorWipe(uint32_t c, uint8_t wait) { //lcd strip
