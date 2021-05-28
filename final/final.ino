@@ -78,7 +78,6 @@ void loop() {
 //  motor(); 
   sinho();
 
- Serial.println(order);
 
   }
   
@@ -132,9 +131,12 @@ void sinho(){ //신호등
         order = 0;
     }
     else if(order == 4){
+       if(now > past){
+                past = now;
+            }
         strip.begin();
         colorWipe(strip.Color(0, 255, 0),50);
-        if(now - past > 10000){
+        if(now - past > 5000){
             order = 3;
             if(now > past){
                 past = now;
