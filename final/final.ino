@@ -18,8 +18,7 @@
 #define yellow_off digitalWrite(7,LOW);
 #define red_off digitalWrite(6,LOW);
 #define green_off digitalWrite(8,LOW);
-#define LEDOFF digitalWrite(6, LOW);digitalWrite(7, LOW);digitalWrite(8,LOW); digitalWrite(9,LOW);digitalWrite(10,LOW);
-
+#define LEDOFF digitalWrite(6, LOW);digitalWrite(7, LOW);digitalWrite(8,LOW);
 
 DHT_Unified dht(12, DHTTYPE);
 
@@ -32,7 +31,7 @@ unsigned long past=0;      //이전시간
 unsigned long now=0;      //현재시간
 int order = 0; 
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, 5, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(7, 5, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(12, 4, NEO_GRB + NEO_KHZ800);
 
 void setup() {
@@ -53,32 +52,26 @@ void setup() {
   strip2.begin();
   strip2.show();
 
-  //모터, 레이저
+  //모터
   my.attach(11);
   my.write(0);
   
-  
-  pinMode(2, INPUT);
-  pinMode(23,OUTPUT);
-  pinMode(6, OUTPUT);
+  pinMode(2, INPUT); // 인도 터치
+  pinMode(23,OUTPUT); // 스피커
+  pinMode(6, OUTPUT); //전구
   pinMode(7, OUTPUT);
   pinMode(8,OUTPUT);
   pinMode(9,OUTPUT);
   pinMode(10,OUTPUT);
-  pinMode(12,INPUT);
-  pinMode(24,INPUT);
-
-  
+  pinMode(12,INPUT);  // dht
+  pinMode(24,INPUT);  // 차도 터치
 }
 
 void loop() {
   lcd_on();
   tone1();
   touch();
-//  motor(); 
   sinho();
-
-
   }
   
 void sinho(){ //신호등
@@ -89,6 +82,7 @@ void sinho(){ //신호등
         LEDOFF;
         green_on;
         red_on2;
+        green_off2;
         my.write(0);
         if(now - past > 10000){
             order = 1;
@@ -114,35 +108,44 @@ void sinho(){ //신호등
         strip2.begin();
         colorWipe(strip.Color(0, 255, 0),50);
         colorWipe2(strip.Color(0, 255, 0),50);
+        red_off2;
+        green_on2;
         LEDOFF;
         red_on;
         green_on2;
         my.write(90);
-        if(now - past > 10000){
+        if(now - past > 5000){
+            strip.begin();
+            strip2.begin();
+            colorWipe(strip.Color(63,0,153),50);
+            colorWipe2(strip2.Color(63,0,153),50);
+       }if(now - past > 10000){
             order = 3;
             if(now > past){
                 past = now;
             }
         }
+        
     }  else if(order == 3){
         strip.begin();
         strip2.begin();
+        green_off2;
         LEDOFF;
         order = 0;
     }
     else if(order == 4){
-       if(now > past){
-                past = now;
-            }
         strip.begin();
-        colorWipe(strip.Color(0, 255, 0),50);
-        if(now - past > 5000){
-            order = 3;
+        strip2.begin();
+        colorWipe(strip.Color(0, 125, 125),50);
+        colorWipe2(strip2.Color(0,125,125),50);
+        if(now - past > 15000){
+            order = 0;
             if(now > past){
                 past = now;
             }
         }
-    }
+      }
+    
 
 }
 
@@ -200,7 +203,12 @@ void lcd_on(){ //dht + lcd
 }
 
 void touch(){
-  if(order == 3 && digitalRead(24)==1){
+  if(now - past > 5000){
+  if(digitalRead(9)==0 && digitalRead(24)==1){
     order = 4;
+    if(now > past){
+                past = now;
+            }
+}
 }
 }
