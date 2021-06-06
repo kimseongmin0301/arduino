@@ -157,9 +157,15 @@ void tone1(){ //터치 소리
     else
         noTone(23);
     }
-  else
-    noTone(23);
-  } 
+  else if(digitalRead(9) == 1){
+      if(digitalRead(24) == 1)
+          tone(23,300);
+       else
+          noTone(23);
+    }
+    else
+      noTone(23);
+    }
 
 void colorWipe(uint32_t c, uint8_t wait) { //lcd strip
   for(uint16_t i=0; i<strip.numPixels(); i++) {
