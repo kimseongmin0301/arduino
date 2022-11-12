@@ -23,7 +23,10 @@ dht 센서, Stirp LED, 음성 센서, LED, Moter, Touch 센서, 필라멘트
 
 # 사진
 
-### 역할
-
 ![image](https://user-images.githubusercontent.com/81849194/201460857-6fcd40e2-213b-4f4d-8693-1d3a54cd48f8.png)
 ![image](https://user-images.githubusercontent.com/81849194/201460929-16775330-ad7d-41f6-866d-d2c24537a254.png)
+
+# 영상
+
+https://user-images.githubusercontent.com/81849194/201461075-c22c942b-1ce8-48c8-a0ef-3924a329831f.mp4
+
